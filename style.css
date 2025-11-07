@@ -1,39 +1,48 @@
 :root {
-    /* Dark Theme Palette (Default Olive) */
-    --bg-gradient-start: #3D402D;
-    --bg-gradient-end: #23261B;
-    --glass-bg: rgba(61, 64, 45, 0.45);
-    --glass-border: rgba(180, 188, 140, 0.2);
-    --text-color: #D8D8C0;
-    --heading-color: #FFFFFF;
-    --highlight-color: #A8B884;
-    --glow-color: #A8B884;
-    --shadow-color: rgba(0, 0, 0, 0.4);
-    --tooltip-lapika-color: #d8b8ff;
-    --tooltip-tika-color: #a1d9ff;
-    --search-highlight-bg: #A8B884;
-    --search-highlight-text: #000000;
+    /* NEW SOLID COLOR THEME (DARK MODE DEFAULT) 
+      "Granth" Theme
+    */
+    --bg-paper: #2B2723; /* गडद तपकिरी कागद */
+    --ui-bg: #3A3631; /* साईडबार/पॉपअप बॅकग्राउंड */
+    --ui-border: #5C554D; /* बॉर्डर रंग */
     
-    --blur-intensity: 12px;
+    --text-ink: #EAE3D9; /* मुख्य टेक्स्ट */
+    --heading-color: #FFFFFF; /* मथळे (Titles) */
+    
+    --primary-color: #E59A5A; /* मुख्य हायलाइट रंग (Warm Orange) */
+    --primary-text: #000000; /* हायलाइटवरील टेक्स्ट */
+
+    --vachan-bg: #3E3934; /* वचनाचा बॅकग्राउंड */
+    
+    --tika-color: #A1D9FF; /* टीका रंग (Blue) */
+    --lapika-color: #D8B8FF; /* लापिका रंग (Purple) */
+
     --font-main: 'Tiro Devanagari Marathi', 'Mukta', sans-serif;
     --font-heading: 'Poppins', sans-serif;
     --base-font-size: 1.05rem;
+    --shadow-color: rgba(0, 0, 0, 0.4);
 }
 
 body.light-theme {
-    --bg-gradient-start: #F5F5DC;
-    --bg-gradient-end: #E8E8D0;
-    --glass-bg: rgba(245, 245, 220, 0.7);
-    --glass-border: rgba(85, 107, 47, 0.2);
-    --text-color: #556B2F;
-    --heading-color: #3B442B;
-    --highlight-color: #556B2F;
-    --glow-color: #6B8E23;
+    /* NEW SOLID COLOR THEME (LIGHT MODE) 
+      "Parchment" Theme
+    */
+    --bg-paper: #FDFBF5; /* कागदाचा रंग (Parchment) */
+    --ui-bg: #F4EFE6; /* साईडबार/पॉपअप बॅकग्राउंड */
+    --ui-border: #DCD3C6; /* बॉर्डर रंग */
+
+    --text-ink: #3D2C1D; /* टेक्स्ट रंग (Dark Brown Ink) */
+    --heading-color: #6B4F3A; /* मथळे (Brown) */
+    
+    --primary-color: #D2691E; /* मुख्य हायलाइट रंग (Sienna/Chocolate) */
+    --primary-text: #FFFFFF; /* हायलाइटवरील टेक्स्ट */
+
+    --vachan-bg: #F8F4ED; /* वचनाचा बॅकग्राउंड */
+
+    --tika-color: #005A9C; /* टीका रंग (Dark Blue) */
+    --lapika-color: #5D3D94; /* लापिका रंग (Dark Purple) */
+    
     --shadow-color: rgba(0, 0, 0, 0.1);
-    --tooltip-lapika-color: #5d3d94;
-    --tooltip-tika-color: #3d6f94;
-    --search-highlight-bg: #556B2F;
-    --search-highlight-text: #FFFFFF;
 }
 
 html {
@@ -47,11 +56,11 @@ html, body {
 }
 body {
     font-family: var(--font-main);
-    color: var(--text-color);
-    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    color: var(--text-ink);
+    background-color: var(--bg-paper); /* REMOVED: linear-gradient */
     margin: 0;
     font-size: var(--base-font-size);
-    transition: background 0.5s ease;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 .app-container {
@@ -62,9 +71,8 @@ body {
 }
 
 .top-navbar {
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--blur-intensity));
-    border-bottom: 1px solid var(--glass-border);
+    background-color: var(--ui-bg); /* REMOVED: glass-bg, backdrop-filter */
+    border-bottom: 1px solid var(--ui-border);
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
@@ -73,6 +81,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 1001;
+    transition: background-color 0.3s;
 }
 
 .menu-btn, .controls button {
@@ -86,7 +95,18 @@ body {
     user-select: none;
 }
 .controls { display: flex; align-items: center; gap: 15px; }
-.controls button { font-size: 1.5rem; border: 1px solid var(--glass-border); border-radius: 8px; padding: 6px 12px; }
+.controls button { 
+    font-size: 1.5rem; 
+    border: 1px solid var(--ui-border); 
+    border-radius: 8px; 
+    padding: 6px 12px;
+    transition: all 0.2s ease;
+}
+.controls button:hover {
+    background-color: var(--primary-color);
+    color: var(--primary-text);
+    border-color: var(--primary-color);
+}
 #search-btn { font-size: 1.6rem; padding: 6px 10px; }
 
 .navbar-title {
@@ -97,32 +117,42 @@ body {
 
 .sidebar {
     position: fixed; top: 0; left: 0; width: 320px; height: 100vh;
-    background: var(--glass-bg); backdrop-filter: blur(var(--blur-intensity));
-    border-right: 1px solid var(--glass-border); box-shadow: 5px 0 35px var(--shadow-color);
-    transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    z-index: 3000; display: flex; flex-direction: column;
+    background-color: var(--ui-bg); /* REMOVED: glass-bg, backdrop-filter */
+    border-right: 1px solid var(--ui-border); 
+    box-shadow: 5px 0 35px var(--shadow-color);
+    transform: translateX(-100%); 
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.3s;
+    z-index: 3000; 
+    display: flex; 
+    flex-direction: column;
 }
 .sidebar.is-open { transform: translateX(0); }
 
 .sidebar-header {
-    padding: 15px; border-bottom: 1px solid var(--glass-border); flex-shrink: 0;
+    padding: 15px; 
+    border-bottom: 1px solid var(--ui-border); 
+    flex-shrink: 0;
 }
 .sidebar-header h2 {
-    font-family: var(--font-heading); color: var(--heading-color); font-size: 1.5rem;
-    margin: 0 0 15px 0; text-align: center;
+    font-family: var(--font-heading); 
+    color: var(--heading-color); 
+    font-size: 1.5rem;
+    margin: 0 0 15px 0; 
+    text-align: center;
 }
 .nav-toggles { display: flex; background: rgba(0,0,0,0.1); border-radius: 10px; }
 body.light-theme .nav-toggles { background: rgba(0,0,0,0.05); }
 .nav-toggles button {
     flex: 1; padding: 10px; background: transparent; border: none;
-    color: var(--text-color); cursor: pointer; font-size: 0.9rem;
+    color: var(--text-ink); 
+    cursor: pointer; font-size: 0.9rem;
     font-family: var(--font-heading); transition: all 0.3s ease; border-radius: 10px;
     user-select: none;
 }
 .nav-toggles button.active {
-    background: var(--highlight-color); 
-    color: var(--search-highlight-text); 
-    box-shadow: 0 0 15px var(--glow-color);
+    background: var(--primary-color); 
+    color: var(--primary-text); 
+    box-shadow: 0 0 15px var(--primary-color);
 }
 
 .toc-wrapper {
@@ -131,23 +161,30 @@ body.light-theme .nav-toggles { background: rgba(0,0,0,0.05); }
     overscroll-behavior: contain;
 }
 .toc-wrapper::-webkit-scrollbar { width: 5px; }
-.toc-wrapper::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 5px; }
+.toc-wrapper::-webkit-scrollbar-thumb { background: var(--ui-border); border-radius: 5px; }
 
 .prakaran-heading, .alpha-group h3 {
     font-family: var(--font-heading); font-weight: 600; font-size: 1.1rem;
     color: var(--heading-color); padding: 10px; margin: 10px 0 5px;
     cursor: pointer; border-radius: 8px; transition: all 0.2s ease;
 }
-.prakaran-heading:hover { background: rgba(255,255,255,0.05); }
+.prakaran-heading:hover { background: rgba(0,0,0,0.05); }
+body.light-theme .prakaran-heading:hover { background: rgba(0,0,0,0.05); }
+
 
 .vachan-list a, #alpha-toc a {
-    display: block; color: var(--text-color); text-decoration: none;
+    display: block; color: var(--text-ink); text-decoration: none;
     padding: 8px 10px 8px 25px; font-size: 0.95rem;
     border-left: 2px solid transparent; transition: all 0.2s ease;
 }
 .vachan-list a:hover, .vachan-list a.active, #alpha-toc a:hover, #alpha-toc a.active {
-    color: var(--highlight-color); border-left-color: var(--highlight-color);
-    background: rgba(168, 184, 132, 0.1);
+    color: var(--primary-color); 
+    border-left-color: var(--primary-color);
+    background: rgba(0,0,0,0.05);
+}
+body.light-theme .vachan-list a:hover, body.light-theme .vachan-list a.active, 
+body.light-theme #alpha-toc a:hover, body.light-theme #alpha-toc a.active {
+    background: rgba(0,0,0,0.03);
 }
 
 .prakaran-toc-container .vachan-list, .prakaran-toc-container .vachan-pagination { display: none; }
@@ -157,10 +194,10 @@ body.light-theme .nav-toggles { background: rgba(0,0,0,0.05); }
     display: flex; justify-content: center; align-items: center; gap: 5px; padding: 10px 0; font-size: 0.9rem;
 }
 .vachan-pagination button {
-    background: transparent; border: 1px solid var(--glass-border); color: var(--text-color);
+    background: transparent; border: 1px solid var(--ui-border); color: var(--text-ink);
     border-radius: 5px; cursor: pointer; padding: 5px 8px; user-select: none;
 }
-.vachan-pagination button.active { background: var(--highlight-color); color: var(--search-highlight-text); }
+.vachan-pagination button.active { background: var(--primary-color); color: var(--primary-text); }
 .vachan-pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .toc-panel { display: none; }
@@ -168,24 +205,27 @@ body.light-theme .nav-toggles { background: rgba(0,0,0,0.05); }
 
 .alpha-bar {
     display: flex; flex-wrap: wrap; gap: 5px; padding: 10px;
-    position: sticky; top: 0; background: var(--glass-bg); backdrop-filter: blur(5px);
+    position: sticky; top: 0; 
+    background-color: var(--ui-bg); /* REMOVED: glass-bg, backdrop-filter */
+    opacity: 0.98;
 }
 .alpha-bar button {
-    background: transparent; border: 1px solid var(--glass-border); color: var(--text-color);
+    background: transparent; border: 1px solid var(--ui-border); color: var(--text-ink);
     border-radius: 8px; width: 40px; height: 40px; cursor: pointer; transition: all 0.2s ease;
     font-size: 1.2rem; user-select: none;
 }
 .alpha-bar button:hover, .alpha-bar button.active {
-    background: var(--highlight-color); 
-    color: var(--search-highlight-text); 
-    border-color: var(--highlight-color);
+    background: var(--primary-color); 
+    color: var(--primary-text); 
+    border-color: var(--primary-color);
 }
 
 #alpha-toc a .prakaran-ref { font-size: 0.8rem; opacity: 0.7; margin-left: 5px; }
 
 .overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.4); z-index: 2999;
+    background: rgba(0,0,0,0.5); /* Solid overlay */
+    z-index: 2999;
     opacity: 0; visibility: hidden;
     transition: opacity 0.4s ease, visibility 0.4s ease;
 }
@@ -202,38 +242,58 @@ body.light-theme .nav-toggles { background: rgba(0,0,0,0.05); }
 
 .welcome-title, .prakaran-content p.p5 {
     font-family: var(--font-heading); color: var(--heading-color);
-    text-align: center; text-shadow: 0 0 15px var(--glow-color);
+    text-align: center; 
+    text-shadow: none; /* REMOVED: glow-color */
 }
 .welcome-title { font-size: 3.5rem; margin-top: 2em; margin-bottom: 0.2em; }
 .prakaran-content p.p5 { font-size: 2.2em; margin-bottom: 1.5em; }
 
 .welcome-subtitle {
-    font-size: 1.5rem; font-family: var(--font-main); color: var(--text-color);
+    font-size: 1.5rem; font-family: var(--font-main); color: var(--text-ink);
     text-align: center; opacity: 0.8; margin-bottom: 2em;
 }
 
 .prakaran-nav {
     margin-top: 40px; display: flex; justify-content: space-between;
-    border-top: 1px solid var(--glass-border); padding-top: 20px;
+    border-top: 1px solid var(--ui-border); padding-top: 20px;
 }
 .prakaran-nav button {
-    background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-color);
+    background: var(--ui-bg); border: 1px solid var(--ui-border); color: var(--text-ink);
     padding: 10px 20px; border-radius: 10px; cursor: pointer; font-size: 1rem;
     transition: all 0.3s ease; user-select: none;
 }
-.prakaran-nav button:hover { background: var(--highlight-color); color: var(--search-highlight-text); }
+.prakaran-nav button:hover { background: var(--primary-color); color: var(--primary-text); }
 
-.prakaran-content p { color: var(--text-color); line-height: 1.8; margin: 1em 0; font-size: inherit; text-align: justify; }
+.prakaran-content p { color: var(--text-ink); line-height: 1.8; margin: 1em 0; font-size: inherit; text-align: justify; }
 
-.prakaran-content p.p9 { font-size: 1.1em; font-weight: 600; color: var(--heading-color); background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; border-left: 3px solid var(--highlight-color); }
-body.dark-theme .prakaran-content p.p9 { background: rgba(255,255,255,0.05); }
+/* Vachan Style */
+.prakaran-content p.p9 { 
+    font-size: 1.1em; 
+    font-weight: 600; 
+    color: var(--heading-color); 
+    background: var(--vachan-bg); 
+    padding: 12px; 
+    border-radius: 8px; 
+    border-left: 3px solid var(--primary-color);
+    transition: background-color 0.3s;
+}
 
-@keyframes flash-highlight { 0% { background-color: var(--search-highlight-bg); } 100% { background-color: transparent; } }
+@keyframes flash-highlight { 
+    0% { background-color: var(--primary-color); color: var(--primary-text); } 
+    100% { background-color: var(--vachan-bg); color: var(--heading-color); } 
+}
+body.light-theme @keyframes flash-highlight { 
+    0% { background-color: var(--primary-color); color: var(--primary-text); } 
+    100% { background-color: var(--vachan-bg); color: var(--heading-color); } 
+}
 .flash-highlight { animation: flash-highlight 1.5s ease-out; }
 
 #tooltip {
-    position: fixed; background: var(--glass-bg); backdrop-filter: blur(var(--blur-intensity));
-    border: 1px solid var(--glass-border); border-radius: 15px; padding: 20px;
+    position: fixed; 
+    background-color: var(--ui-bg); /* REMOVED: glass-bg, backdrop-filter */
+    border: 1px solid var(--ui-border); 
+    border-radius: 15px; 
+    padding: 20px;
     box-shadow: 0 10px 40px var(--shadow-color);
     width: 80vw;
     max-width: 650px;
@@ -250,55 +310,67 @@ body.dark-theme .prakaran-content p.p9 { background: rgba(255,255,255,0.05); }
     transition: all 0.2s ease; padding: 0; z-index: 10; user-select: none;
 }
 #tooltip-close-btn:hover {
-    background: var(--highlight-color); color: var(--search-highlight-text); transform: rotate(90deg);
+    background: var(--primary-color); color: var(--primary-text); transform: rotate(90deg);
 }
 #tooltip h4 { 
-    margin-top: 0; color: var(--highlight-color); border-bottom: 1px solid var(--glass-border); 
-    padding-bottom: 10px; text-shadow: 0 0 8px var(--glow-color); 
+    margin-top: 0; color: var(--primary-color); 
+    border-bottom: 1px solid var(--ui-border); 
+    padding-bottom: 10px; 
+    text-shadow: none; /* REMOVED: glow */
 }
-#tooltip .tooltip-lapika { font-style: italic; color: var(--tooltip-lapika-color); }
-#tooltip .tooltip-tika { font-weight: 600; color: var(--tooltip-tika-color); }
+#tooltip .tooltip-lapika { font-style: italic; color: var(--lapika-color); }
+#tooltip .tooltip-tika { font-weight: 600; color: var(--tika-color); }
 #tooltip-content {
     max-height: 50vh; overflow-y: auto; padding-right: 10px; 
     overscroll-behavior: contain;
 }
 #tooltip-content::-webkit-scrollbar { width: 4px; }
-#tooltip-content::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
+#tooltip-content::-webkit-scrollbar-thumb { background: var(--ui-border); border-radius: 4px; }
 
 .search-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 4000; background: rgba(0,0,0,0.3); backdrop-filter: blur(5px);
+    z-index: 4000; 
+    background: rgba(0,0,0,0.5); /* Solid overlay */
+    backdrop-filter: blur(5px); /* Kept blur here as it's an overlay */
     display: none; flex-direction: column; align-items: center; padding-top: 10vh;
 }
 .search-container {
     width: 90%; max-width: 700px;
-    background: var(--glass-bg); backdrop-filter: blur(var(--blur-intensity));
-    border: 1px solid var(--glass-border); border-radius: 15px;
+    background-color: var(--ui-bg); /* REMOVED: glass-bg, backdrop-filter */
+    border: 1px solid var(--ui-border); 
+    border-radius: 15px;
     box-shadow: 0 10px 40px var(--shadow-color);
 }
-.search-bar { display: flex; padding: 10px; border-bottom: 1px solid var(--glass-border); }
+.search-bar { display: flex; padding: 10px; border-bottom: 1px solid var(--ui-border); }
 #search-input {
     flex-grow: 1; background: transparent; border: none; font-size: 1.5rem;
     color: var(--heading-color); padding: 10px; outline: none;
 }
-#search-input::placeholder { color: var(--text-color); opacity: 0.6; }
+#search-input::placeholder { color: var(--text-ink); opacity: 0.6; }
 #search-close-btn {
     background: transparent; border: none; font-size: 2rem; color: var(--heading-color); cursor: pointer;
     user-select: none;
 }
 #search-results { max-height: 60vh; overflow-y: auto; padding: 10px; }
 .search-result-item {
-    display: block; padding: 15px; border-radius: 8px; color: var(--text-color);
+    display: block; padding: 15px; border-radius: 8px; color: var(--text-ink);
     text-decoration: none; transition: background 0.2s;
 }
-.search-result-item:hover { background: rgba(255,255,255,0.05); }
-.search-result-item .highlight { background-color: var(--search-highlight-bg); color: var(--search-highlight-text); padding: 2px 4px; border-radius: 4px; }
+.search-result-item:hover { background: rgba(0,0,0,0.05); }
+body.light-theme .search-result-item:hover { background: rgba(0,0,0,0.03); }
+
+.search-result-item .highlight { 
+    background-color: var(--primary-color); 
+    color: var(--primary-text); 
+    padding: 2px 4px; 
+    border-radius: 4px; 
+}
 .search-result-item .result-prakaran { display: block; font-size: 0.8rem; opacity: 0.7; margin-top: 5px; }
-.search-result-item .result-vachan-num { font-weight: bold; color: var(--highlight-color); }
+.search-result-item .result-vachan-num { font-weight: bold; color: var(--primary-color); }
 
 .footer {
     position: fixed; bottom: 10px; right: 15px; font-size: 0.8rem;
-    color: var(--text-color); opacity: 0.5; z-index: 1;
+    color: var(--text-ink); opacity: 0.5; z-index: 1;
 }
 
 @media (max-width: 768px) {
@@ -315,5 +387,3 @@ body.dark-theme .prakaran-content p.p9 { background: rgba(255,255,255,0.05); }
     #search-input { font-size: 1.2rem; }
     #tooltip { width: 90vw; }
 }
-
-/* #original-content { display: none; } <-- ही ओळ काढली */
