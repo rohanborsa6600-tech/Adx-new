@@ -2,6 +2,10 @@
     /* Dark Theme Palette (Default Olive) */
     --bg-gradient-start: #3D402D;
     --bg-gradient-end: #23261B;
+    
+    /* === 🛑 बॅकग्राउंड इमेज (Dark) === */
+    --bg-image: url('https://plus.unsplash.com/premium_vector-1744148430318-81591e226609?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1272');
+    
     --glass-bg: rgba(61, 64, 45, 0.45);
     --glass-border: rgba(180, 188, 140, 0.2);
     --text-color: #D8D8C0;
@@ -14,6 +18,13 @@
     --search-highlight-bg: #A8B884;
     --search-highlight-text: #000000;
     
+    /* === 🛑 कंटेंटसाठी नवीन व्हेरिएबल्स === */
+    --content-bg: rgba(41, 44, 29, 0.35); /* कंटेंट पॅनलचा ग्लास बॅकग्राउंड */
+    --content-border: rgba(180, 188, 140, 0.15);
+    --content-text-color: #E0E0C8;      /* कंटेंटमधील मुख्य टेक्स्ट */
+    --content-heading-color: #FFFFFF;   /* कंटेंटमधील शीर्षक (p5) */
+    --content-special-bg: rgba(168, 184, 132, 0.1); /* कंटेंटमधील हायलाईट (p9) */
+    
     --blur-intensity: 12px;
     --font-main: 'Tiro Devanagari Marathi', 'Mukta', sans-serif;
     --font-heading: 'Poppins', sans-serif;
@@ -23,6 +34,10 @@
 body.light-theme {
     --bg-gradient-start: #F5F5DC;
     --bg-gradient-end: #E8E8D0;
+    
+    /* === 🛑 बॅकग्राउंड इमेज (Light) === */
+    --bg-image: url('https://plus.unsplash.com/premium_vector-1752574420350-66e0d12198d1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1470');
+    
     --glass-bg: rgba(245, 245, 220, 0.7);
     --glass-border: rgba(85, 107, 47, 0.2);
     --text-color: #556B2F;
@@ -34,6 +49,13 @@ body.light-theme {
     --tooltip-tika-color: #3d6f94;
     --search-highlight-bg: #556B2F;
     --search-highlight-text: #FFFFFF;
+    
+    /* === 🛑 कंटेंटसाठी नवीन व्हेरिएबल्स === */
+    --content-bg: rgba(245, 245, 220, 0.6); /* कंटेंट पॅनलचा ग्लास बॅकग्राउंड */
+    --content-border: rgba(85, 107, 47, 0.15);
+    --content-text-color: #3B442B;      /* कंटेंटमधील मुख्य टेक्स्ट */
+    --content-heading-color: #3B442B;   /* कंटेंटमधील शीर्षक (p5) */
+    --content-special-bg: rgba(85, 107, 47, 0.1); /* कंटेंटमधील हायलाईट (p9) */
 }
 
 html {
@@ -45,10 +67,18 @@ html, body {
     overflow: hidden;
     -webkit-tap-highlight-color: transparent;
 }
+
 body {
     font-family: var(--font-main);
     color: var(--text-color);
-    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    
+    /* === 🛑 अपडेट केलेला बॅकग्राउंड === */
+    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end)), 
+                var(--bg-image);
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed; /* इमेज स्क्रोल होणार नाही */
+    
     margin: 0;
     font-size: var(--base-font-size);
     transition: background 0.5s ease;
@@ -195,17 +225,36 @@ body.light-theme .nav-toggles { background: rgba(0,0,0,0.05); }
     flex-grow: 1; overflow-y: auto;
     overscroll-behavior: contain;
 }
+
 .prakaran-content {
-    max-width: 850px; margin: 0 auto; padding: 20px 40px 80px 40px; display: none;
+    max-width: 850px;
+    margin: 20px auto 80px auto; /* 🛑 मार्जिन बदलले */
+    padding: 20px 40px;         /* 🛑 पॅडिंग बदलले */
+    display: none;
+    
+    /* === 🛑 कंटेंटसाठी नवीन ग्लास स्टाईल === */
+    background: var(--content-bg);
+    backdrop-filter: blur(var(--blur-intensity));
+    border: 1px solid var(--content-border);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 var(--shadow-color);
 }
 .prakaran-content.active { display: block; }
 
-.welcome-title, .prakaran-content p.p5 {
+.welcome-title {
     font-family: var(--font-heading); color: var(--heading-color);
     text-align: center; text-shadow: 0 0 15px var(--glow-color);
+    font-size: 3.5rem; margin-top: 2em; margin-bottom: 0.2em;
 }
-.welcome-title { font-size: 3.5rem; margin-top: 2em; margin-bottom: 0.2em; }
-.prakaran-content p.p5 { font-size: 2.2em; margin-bottom: 1.5em; }
+
+.prakaran-content p.p5 {
+    font-family: var(--font-heading);
+    color: var(--content-heading-color); /* 🛑 बदलले */
+    text-align: center;
+    text-shadow: 0 0 15px var(--glow-color);
+    font-size: 2.2em;
+    margin-bottom: 1.5em;
+}
 
 .welcome-subtitle {
     font-size: 1.5rem; font-family: var(--font-main); color: var(--text-color);
@@ -223,10 +272,23 @@ body.light-theme .nav-toggles { background: rgba(0,0,0,0.05); }
 }
 .prakaran-nav button:hover { background: var(--highlight-color); color: var(--search-highlight-text); }
 
-.prakaran-content p { color: var(--text-color); line-height: 1.8; margin: 1em 0; font-size: inherit; text-align: justify; }
+.prakaran-content p {
+    color: var(--content-text-color); /* 🛑 बदलले */
+    line-height: 1.8;
+    margin: 1em 0;
+    font-size: inherit;
+    text-align: justify;
+}
 
-.prakaran-content p.p9 { font-size: 1.1em; font-weight: 600; color: var(--heading-color); background: rgba(0,0,0,0.1); padding: 12px; border-radius: 8px; border-left: 3px solid var(--highlight-color); }
-body.dark-theme .prakaran-content p.p9 { background: rgba(255,255,255,0.05); }
+.prakaran-content p.p9 {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--content-heading-color); /* 🛑 बदलले */
+    background: var(--content-special-bg); /* 🛑 बदलले */
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 3px solid var(--highlight-color);
+}
 
 @keyframes flash-highlight { 0% { background-color: var(--search-highlight-bg); } 100% { background-color: transparent; } }
 .flash-highlight { animation: flash-highlight 1.5s ease-out; }
@@ -304,7 +366,7 @@ body.dark-theme .prakaran-content p.p9 { background: rgba(255,255,255,0.05); }
 @media (max-width: 768px) {
     .sidebar { width: 280px; }
     .content-panel { padding: 0; }
-    .prakaran-content { padding: 15px 20px 60px 20px; }
+    .prakaran-content { padding: 15px 20px 60px 20px; margin: 10px auto; } /* 🛑 मोबाईलसाठी मार्जिन ऍडजस्ट केले */
     .top-navbar { padding: 10px 15px; }
     .navbar-title { display: none; }
     .welcome-title { font-size: 2.5rem; }
@@ -317,3 +379,14 @@ body.dark-theme .prakaran-content p.p9 { background: rgba(255,255,255,0.05); }
 }
 
 #original-content { display: none; }
+
+/* === 🛑 वचनातील लपिका आणि टीका साठी नवीन स्टाईल === */
+.lapika {
+    font-style: italic;
+    color: var(--tooltip-lapika-color);
+}
+
+.tika {
+    font-weight: 600; /* टीका ठळक दिसण्यासाठी */
+    color: var(--tooltip-tika-color);
+}
