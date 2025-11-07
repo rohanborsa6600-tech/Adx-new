@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+Document.addEventListener('DOMContentLoaded', () => {
     // Select all elements
     const originalContent = document.getElementById('original-content');
     const prakaranWrapper = document.getElementById('prakaran-wrapper');
@@ -133,7 +133,12 @@ document.addEventListener('DOMContentLoaded', () => {
             prakaran.content.forEach(item => {
                 const p = document.createElement(item.tag);
                 p.className = item.className;
+                
                 if (item.type === 'vachan') {
+                    // *** हा नवीन बदल आहे ***
+                    p.classList.add('vachan-content'); // <<<<<<< CSS साठी क्लास जोडला
+                    // *** बदल समाप्त ***
+
                     const vachan = prakaran.vachans.find(v => v.id === item.id);
                     if(vachan) {
                         // Inject the vachan number
@@ -593,15 +598,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (savedTheme) {
                 document.body.className = savedTheme;
-                themeToggleBtn.textContent = document.body.classList.contains('dark-theme') ? '🌙' : '☀️';
+            } else {
+                 document.body.className = 'dark-theme'; // Default to dark
             }
+            themeToggleBtn.textContent = document.body.classList.contains('dark-theme') ? '🌙' : '☀️';
+
 
             if (savedFontSize) {
                 baseFontSize = parseFloat(savedFontSize);
                 contentPanel.style.fontSize = `${baseFontSize}rem`;
             }
-        } catch (e) {
+        } catch (e)
+         {
             console.error("Could not load settings from localStorage:", e);
+            document.body.className = 'dark-theme'; // Fallback
+            themeToggleBtn.textContent = '🌙';
         }
     }
 
