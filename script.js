@@ -1,9 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Select all elements
-    // const originalContent = document.getElementById('original-content'); // <-- ही ओळ काढली
+    const originalContent = document.getElementById('original-content');
     const prakaranWrapper = document.getElementById('prakaran-wrapper');
     const prakaranToc = document.getElementById('prakaran-toc');
-    // ... (बाकी सर्व व्हेरिएबल्स सारखेच राहतील)
+    const alphaToc = document.getElementById('alpha-toc');
+    const alphaBar = alphaToc.querySelector('.alpha-bar');
+    const alphaListContent = alphaToc.querySelector('.alpha-list-content');
+    const prakaranTitleEl = document.getElementById('prakaran-title');
+    const tooltip = document.getElementById('tooltip');
+    const tooltipContentDiv = document.getElementById('tooltip-content');
+    const tooltipCloseBtn = document.getElementById('tooltip-close-btn');
+    const sidebar = document.getElementById('sidebar');
+    const menuBtn = document.getElementById('menu-btn');
+    const overlay = document.getElementById('overlay');
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const fontIncBtn = document.getElementById('font-inc-btn');
+    const fontDecBtn = document.getElementById('font-dec-btn');
+    const searchBtn = document.getElementById('search-btn');
+    const searchOverlay = document.getElementById('search-overlay');
+    const searchInput = document.getElementById('search-input');
+    const searchCloseBtn = document.getElementById('search-close-btn');
     const searchResults = document.getElementById('search-results');
     const contentPanel = document.querySelector('.content-panel');
 
@@ -31,16 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function parseContent() {
         let currentPrakaran = null;
         let paragraphIdCounter = 0;
-
-        // --- UPDATE ---
-        // 'rawPothiContent' व्हेरिएबल content.js मधून येत आहे
-        // मजकूर वाचण्यासाठी एक तात्पुरता (temporary) div तयार करा
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = rawPothiContent; 
-        
-        // तात्पुरत्या div मधून children वाचा
-        const children = Array.from(tempDiv.children);
-        // --- END UPDATE ---
+        const children = Array.from(originalContent.children);
 
         children.forEach((p, i) => {
             const text = p.innerText.trim();
@@ -72,12 +79,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     const vachanId = `${currentPrakaran.id}-vachan-${localVachanNumber -1}`;
                     contentItem.id = vachanId;
                     
+                    // --- REFACTORED LOGIC ---
+                    // Look ahead to find Tika and Lapika for this vachan
                     let tika = '', lapika = '';
                     let nextIndex = i + 1;
                     while (nextIndex < children.length) {
                         const nextEl = children[nextIndex];
                         const nextText = nextEl.innerText.trim();
                         
+                        // Stop if we hit the next vachan or prakaran title
                         if (nextText.startsWith('वचन') || nextEl.classList.contains('p5')) {
                             break; 
                         }
@@ -89,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                         nextIndex++;
                     }
+                    // --- END REFACTORED LOGIC ---
 
                     const vachanInfo = { 
                         id: vachanId, 
@@ -96,8 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         prakaranIndex: prakaranData.length, 
                         prakaranTitle: currentPrakaran.title, 
                         number: localVachanNumber,
-                        tika: tika || null,
-                        lapika: lapika || null
+                        tika: tika || null,     // Store the found Tika
+                        lapika: lapika || null // Store the found Lapika
                     };
                     
                     currentPrakaran.vachans.push(vachanInfo);
@@ -109,11 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentPrakaran) prakaranData.push(currentPrakaran);
     }
     
-    //
-    // ... (बाकी सर्व फंक्शन्स (buildPrakaranPages, showTikaPopup, इ.) सारखीच राहतील) ...
-    // ... (फक्त parseContent फंक्शनमध्ये बदल होता) ...
-    //
-
     /**
      * Dynamically creates the HTML pages for each prakaran.
      */
@@ -173,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     /**
      * Shows the Tika/Lapika popup for a given vachan.
+     * This is now much simpler and reads from pre-parsed data.
      */
     function showTikaPopup(event, vachanId) {
         event.preventDefault();
@@ -190,6 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tooltipHTML) {
             tooltipContentDiv.innerHTML = tooltipHTML;
             
+            // Positioning logic (unchanged)
             const linkRect = event.currentTarget.getBoundingClientRect();
             tooltip.style.left = `${linkRect.right + 15}px`;
             tooltip.style.top = `${linkRect.top}px`;
@@ -224,15 +232,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const vachanId = linkElement.dataset.vachanId;
         const vachan = allVachans.find(v => v.id === vachanId);
 
+        // Click / Tap logic
         linkElement.addEventListener('click', (e) => {
             e.preventDefault();
             const now = new Date().getTime();
             const timeSince = now - lastTap;
 
             if (timeSince < 300 && timeSince > 0) {
+                // Double-tap: Show Tika
                 showTikaPopup(e, vachanId);
                 lastTap = 0;
             } else {
+                // Single-tap: Navigate to vachan
                 if (vachan) {
                    showPrakaran(vachan.prakaranIndex, vachan.id);
                 }
@@ -240,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
             lastTap = new Date().getTime();
         });
 
+        // Right-click / Long-press logic
         linkElement.addEventListener('contextmenu', (e) => {
             e.preventDefault();
             showTikaPopup(e, vachanId);
@@ -310,14 +322,17 @@ document.addEventListener('DOMContentLoaded', () => {
             h3.onclick = () => {
                 if (prakaran.vachans.length > 0) {
                     container.classList.toggle('expanded');
+                    // Load paginated vachans only when expanded
                     if (container.classList.contains('expanded') && vachanListDiv.children.length === 0 && prakaran.vachans.length > VACHAN_PAGE_SIZE) {
                         renderVachanPage(container, index, 0);
                     }
                 } else {
+                    // If prakaran has no vachans, just navigate to it
                     showPrakaran(index);
                 }
             };
             
+            // If 30 or fewer vachans, just show them all (no pagination)
             if (prakaran.vachans.length <= VACHAN_PAGE_SIZE) { 
                 prakaran.vachans.forEach(vachan => {
                     const a = document.createElement('a');
@@ -328,6 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     vachanListDiv.appendChild(a);
                 });
             }
+             // If more than 30, add pagination container
              if (prakaran.vachans.length > VACHAN_PAGE_SIZE) {
                 const paginationDiv = document.createElement('div');
                 paginationDiv.className = 'vachan-pagination';
@@ -362,6 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.onclick = () => {
                     const target = document.getElementById(`alpha-group-${letter}`);
                     if(target) {
+                        // Use the toc-wrapper as the scroller
                         alphaToc.querySelector('.toc-wrapper').scrollTop = target.offsetTop;
                     }
                 };
@@ -390,9 +407,11 @@ document.addEventListener('DOMContentLoaded', () => {
      * Sets up all main application event listeners.
      */
     function setupEventListeners() {
+        // Sidebar toggle
         menuBtn.onclick = () => { sidebar.classList.add('is-open'); overlay.classList.add('is-visible'); };
         overlay.onclick = () => { sidebar.classList.remove('is-open'); overlay.classList.remove('is-visible'); };
         
+        // TOC tabs
         const tocPrakaranBtn = document.getElementById('toc-prakaran-btn');
         const tocAlphaBtn = document.getElementById('toc-alpha-btn');
         
@@ -409,6 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tocAlphaBtn.classList.add('active');
         };
 
+        // Theme toggle
         themeToggleBtn.onclick = () => {
             document.body.classList.toggle('light-theme');
             document.body.classList.toggle('dark-theme');
@@ -416,6 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveSettings();
         };
 
+        // Font size
         fontIncBtn.onclick = () => {
             baseFontSize = Math.min(1.5, baseFontSize + 0.05);
             contentPanel.style.fontSize = `${baseFontSize}rem`;
@@ -427,6 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveSettings();
         };
         
+        // Tooltip close
         tooltipCloseBtn.onclick = (e) => {
             e.stopPropagation();
             tooltip.classList.remove('visible');
@@ -442,6 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
+        // Search UI
         searchBtn.onclick = () => { searchOverlay.style.display = 'flex'; searchInput.focus(); };
         searchCloseBtn.onclick = () => { searchOverlay.style.display = 'none'; searchInput.value = ''; searchResults.innerHTML = ''; };
         searchOverlay.onclick = (e) => { if(e.target === searchOverlay) searchCloseBtn.click(); };
@@ -475,6 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }).join('');
         
+        // Add click handlers to search results
         searchResults.querySelectorAll('.search-result-item').forEach(item => {
             item.onclick = (e) => {
                 e.preventDefault();
@@ -514,6 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         currentPrakaranIndex = index;
 
+        // Hide all prakarans, show the selected one
         document.querySelectorAll('.prakaran-content').forEach(p => p.classList.remove('active'));
         const prakaranToShow = document.getElementById(prakaranData[index].id);
         
@@ -524,18 +549,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (elementId) {
                 const targetEl = document.getElementById(elementId);
                 if (targetEl) {
+                    // Scroll to the element
                     setTimeout(() => {
                         targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        // Add flash effect
                         targetEl.classList.remove('flash-highlight');
                         void targetEl.offsetWidth; // Trigger reflow
                         targetEl.classList.add('flash-highlight');
                     }, 100);
                 }
             } else {
+                // Scroll to top of prakaran
                 contentPanel.scrollTop = 0;
             }
         }
         
+        // Close sidebar after navigation
         sidebar.classList.remove('is-open');
         overlay.classList.remove('is-visible');
     }
