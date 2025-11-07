@@ -316,4 +316,4 @@ body.dark-theme .prakaran-content p.p9 { background: rgba(255,255,255,0.05); }
     #tooltip { width: 90vw; }
 }
 
-#original-content { display: none; }
+/* #original-content { display: none; } <-- ही ओळ काढली */
